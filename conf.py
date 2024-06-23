@@ -1,5 +1,5 @@
 db_name = 'school_mark_project'
 db_user = 'school_pr'
 db_host = 'localhost'
-db_password = '3206827311'
+db_password = '12345678'
 db_port = '5432'
