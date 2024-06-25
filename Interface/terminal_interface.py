@@ -8,6 +8,14 @@ def message(error_message):
 def clear_terminal():
     system('clear')
 
+def print_list(_list):
+    for i in _list:
+        print(i)
+
+def get_inp(message) -> str:
+    res = input(message)
+    return res
+
 #MENU
 def start_menu() -> str:
     clear_terminal()
@@ -24,20 +32,6 @@ def start_menu() -> str:
 
 
 #YEAR
-def get_year_list(year_list):
-    clear_terminal()
-    for i in year_list:
-        print(i)
-    
-def login_year() -> str:
-    year_name = input('Введите название года: ')
-    return year_name
-
-def create_year_getname() -> str:
-    clear_terminal()
-    year = input('Введите имя года: ')
-    return year
-
 def creat_year_qulist() -> list:
     qulist = []
     print("""Введите даты начала каждой четверти(из 4) в формате
@@ -45,7 +39,3 @@ def creat_year_qulist() -> list:
     for i in range(1,5):
         qulist.append(list(input(f'{i}: ').split()))
     return qulist
-
-def delete_year() -> str:
-    year = input('Введите название года: ')
-    return year

@@ -4,9 +4,10 @@ from Interface.terminal_interface import message
 
 #YEAR
 def login_year():
+    gui.clear_terminal()
     year_list = postgresql_db.get_list_year()
-    gui.get_year_list(year_list=year_list)
-    year_name = gui.login_year()
+    gui.print_list(_list=year_list)
+    year_name = gui.get_inp('Введите название года: ')
 
     if year_name in year_list:
         #create obj
@@ -15,7 +16,8 @@ def login_year():
         message('Нет такого года')
 
 def create_year():
-    year = gui.create_year_getname()
+    gui.clear_terminal()
+    year = gui.get_inp('Введите название года: ')
     if postgresql_db.exist_year_name(year_name=year) > 0:
         message('Год с таким именем уже существует')
         return
@@ -28,10 +30,12 @@ def create_year():
         message('Год был создан')
 
 def delete_year():
-    gui.get_year_list(postgresql_db.get_list_year())
-    year = gui.delete_year()
+    gui.clear_terminal()
+    year_ls = postgresql_db.get_list_year()
+    gui.print_list(year_ls)
+    year = gui.get_inp('Введите название года: ')
 
-    if postgresql_db.exist_year_name(year_name=year) < 1:
+    if not year in year_ls:
         message('Такого года не существует')
         return
 
@@ -41,6 +45,35 @@ def delete_year():
         message('Год был удален')
 
 
+#SUBJECT
+def create_subject():
+    gui.clear_terminal()
+    sub_name = gui.get_inp('Введите название предмета: ')
+    
+    if postgresql_db.exist_subject_name(subject_name=sub_name) > 0:
+        message('Предмет с таким именем уже существует')
+    elif postgresql_db.create_subject(subj_name=sub_name) == 0:
+        message('Предмет был создан')
+    else:
+        message('Не удалось создать предмет')
+
+def delete_subject():
+    gui.clear_terminal()
+    sub_ls = postgresql_db.get_list_subject()
+    gui.print_list(sub_ls)
+    sub_name = gui.get_inp('Введите название предмета: ')
+    
+    if not sub_name in sub_ls:
+        message('Нет такого предмета')
+        return
+
+    if postgresql_db.delete_subject(subj_name=sub_name) == 0:
+        message('Предмет был удален')
+    else:
+        message('Не удалось удалить предмет')
+
+
+#MAIN
 def main():
     postgresql_db.connect()
     while 1:
@@ -52,9 +85,9 @@ def main():
             case '3':
                 delete_year()
             case '4':
-                pass
+                create_subject()
             case '5':
-                pass
+                delete_subject()
             case '6':
                 break
             case _:
