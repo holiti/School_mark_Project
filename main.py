@@ -1,6 +1,7 @@
 import postgresql_db
 import Interface.terminal_interface as gui
 from Interface.terminal_interface import message
+import datetime
 
 #YEAR
 def login_year():
@@ -22,7 +23,7 @@ def create_year():
         message('Год с таким именем уже существует')
         return
     
-    quarter_list = gui.creat_year_qulist()
+    quarter_list = [[datetime.datetime.strptime(e,'%Y-%m-%d') for e in i] for i in gui.creat_year_qulist()]
     
     if postgresql_db.create_year(year_name=year,quarterlist=quarter_list) != 0:
         message('Не удалось создать')
