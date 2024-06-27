@@ -119,6 +119,7 @@ def delete_subject(subj_name) -> int:
     return 0
 
 
+#CLASS
 class Education_year:
     def __init__(self,year_id) -> None:
         self.year_id = year_id
@@ -128,3 +129,33 @@ class Education_year:
                 (year_id,))
             self.quarterlist_id = [i[0] for i in curr.fetchall()]
             
+    def add_mark(self, mark, date, subj_id, quarter_num) -> int:
+        try:
+            with db.cursor() as curr:
+                curr.execute('INSERT INTO marks(mark, mark_date, subject_id, quarter_id) VALUES (%s,%s,%s,%s);',
+                    (mark, date, subj_id, self.quarterlist_id[quarter_num]))
+        except Exception as e:
+            db.rollback()
+            #need print
+            return 1
+        db.commit()
+        return 0
+
+
+    def quarter_marks(self, subj_id, quarter_num) -> list:
+        try:
+            with db.cursor() as curr:
+                curr.execute('SELECT AVG(mark) FROM marks WHERE subject_id = %s AND quarter_id = %s;',
+                    (subj_id,self.quarterlist_id[quarter_num]))
+                mark_list = [curr.fetchone()[0]]
+
+                i = (1 if mark_list[0] % 2 == 0 else 0) 
+                mark_list[0] = round(mark_list[0]) - i
+
+                curr.execute('SELECT mark, mark_date FROM marks WHERE subject_id = %s AND quarter_id = %s;',
+                    (subj_id,self.quarterlist_id[quarter_num]))
+                mark_list += curr.fetchall()
+        except Exception as e:
+            #need print
+            return [-1]
+        return mark_list
