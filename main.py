@@ -3,6 +3,42 @@ import Interface.terminal_interface as gui
 from Interface.terminal_interface import message
 import datetime
 
+#IN YEAR
+def add_mark(obj):
+    gui.clear_terminal()
+    mark, subj_name, date = gui.add_mark()
+
+    if not((len(mark) == 1 and mark > '0' and mark <= '9') or (len(mark) == 2 and mark[0] == '1' and mark[1] == '0')):
+        message('Неправильно введеа отметка')
+        return
+
+    subj_id = postgresql_db.exist_subject_name(subj_name)
+    if subj_id < 1:
+        message('Нет такого предмета')
+        return 
+    
+    rt = obj.add_mark(mark, date, subj_id)
+    if rt == 2:
+        message('В эту дату нету четверти')
+    elif rt == 1:
+        message('Не удалось добавить отметку')
+    else:
+        message('Оценка была добавлена')
+
+def year_menu(year_name):
+    year = postgresql_db.Education_year(postgresql_db.exist_year_name(year_name))
+    while 1:
+        ch = gui.year_menu()
+        match ch:
+            case '1':
+                add_mark(year)
+            case '2':
+                pass
+            case '3':
+                break
+            case _:
+                message('Нет такого выбора')
+
 #YEAR
 def login_year():
     gui.clear_terminal()
@@ -11,7 +47,7 @@ def login_year():
     year_name = gui.get_inp('Введите название года: ')
 
     if year_name in year_list:
-        #create obj
+        year_menu(year_name)
         pass
     else:
         message('Нет такого года')
@@ -23,7 +59,7 @@ def create_year():
         message('Год с таким именем уже существует')
         return
     
-    quarter_list = [[datetime.datetime.strptime(e,'%Y-%m-%d') for e in i] for i in gui.creat_year_qulist()]
+    quarter_list = gui.creat_year_qulist()
     
     if postgresql_db.create_year(year_name=year,quarterlist=quarter_list) != 0:
         message('Не удалось создать')

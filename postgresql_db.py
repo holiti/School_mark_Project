@@ -128,12 +128,22 @@ class Education_year:
             curr.execute('SELECT quarter_id FROM quarters WHERE year_id = %s ORDER BY start_date;',
                 (year_id,))
             self.quarterlist_id = [i[0] for i in curr.fetchall()]
-            
-    def add_mark(self, mark, date, subj_id, quarter_num) -> int:
+
+    def add_mark(self, mark, date, subj_id) -> int:
+        quarter_id = None
         try:
             with db.cursor() as curr:
+                curr.execute('SELECT quarter_id FROM quarters WHERE year_id = %s AND start_date <= %s AND %s <= finish_date;',
+                    (self.year_id, date, date))
+                
+                quarter_id = curr.fetchone()
+                if quarter_id == None:
+                    return 2
+                else:
+                    quarter_id = quarter_id[0]
+
                 curr.execute('INSERT INTO marks(mark, mark_date, subject_id, quarter_id) VALUES (%s,%s,%s,%s);',
-                    (mark, date, subj_id, self.quarterlist_id[quarter_num]))
+                    (mark, date, subj_id, quarter_id))
         except Exception as e:
             db.rollback()
             #need print

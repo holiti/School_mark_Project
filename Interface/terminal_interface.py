@@ -39,3 +39,19 @@ def creat_year_qulist() -> list:
     for i in range(1,5):
         qulist.append(list(input(f'{i}: ').split()))
     return qulist
+
+#IN YEAR
+def year_menu() -> int:
+    clear_terminal()
+    print("""1 - Добавить отметку
+2 - Получить отметки за четверть
+3 - Выйти из года""")
+    
+    ch = input('Ваш выбор: ')
+    return ch
+
+def add_mark():
+    mark = input('Введите оценку(10 бальная система): ')
+    subj_name = input('Введеите название предммета: ')
+    date = input('Введите дату получения оценки: ')
+    return [mark, subj_name, date]
