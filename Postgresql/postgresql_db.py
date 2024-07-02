@@ -162,7 +162,7 @@ class Education_year:
                 i = (1 if mark_list[0] % 2 == 0 else 0) 
                 mark_list[0] = round(mark_list[0]) - i
 
-                curr.execute('SELECT mark, mark_date FROM marks WHERE subject_id = %s AND quarter_id = %s;',
+                curr.execute('SELECT mark, mark_date FROM marks WHERE subject_id = %s AND quarter_id = %s ORDER BY mark_date;',
                     (subj_id,self.quarterlist_id[quarter_num]))
                 mark_list += curr.fetchall()
         except Exception as e:

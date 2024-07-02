@@ -3,7 +3,7 @@ from time import sleep
 
 def message(error_message):
     print(error_message)
-    sleep(1)
+    sleep(2)
 
 def clear_terminal():
     system('clear')
@@ -55,3 +55,19 @@ def add_mark():
     subj_name = input('Введеите название предммета: ')
     date = input('Введите дату получения оценки: ')
     return [mark, subj_name, date]
+
+def quarter_mark() -> list:
+    subj_name = input('Введите название предмета: ')
+    quarter_num = input('Введите номер четверти(1, 2, 3 или 4): ')
+    return [subj_name, quarter_num]
+
+def print_quarter_mark(mark_list,subj_name):
+    print(str('средний бал').rjust(len(subj_name) + 12),end='')
+    for i in range(1,len(mark_list)):
+        print(f' {mark_list[i][1]}',end = '')
+    print()
+    print(subj_name,end = '')
+    print(str(mark_list[0]).rjust(12),end='')
+    for i in range(1,len(mark_list)):
+        print(' ' + str(mark_list[i][0]).rjust(10),end='')
+    input('\nНажмите ENTER для выхода: ')
